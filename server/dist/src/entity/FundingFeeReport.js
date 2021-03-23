@@ -9,35 +9,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FundingFee = void 0;
+exports.FundingFeeReport = void 0;
 const typeorm_1 = require("typeorm");
-let FundingFee = class FundingFee {
+let FundingFeeReport = class FundingFeeReport {
 };
 __decorate([
     typeorm_1.PrimaryGeneratedColumn(),
     __metadata("design:type", Number)
-], FundingFee.prototype, "id", void 0);
+], FundingFeeReport.prototype, "id", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], FundingFee.prototype, "symbol", void 0);
+], FundingFeeReport.prototype, "symbol", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], FundingFee.prototype, "income", void 0);
-__decorate([
-    typeorm_1.Column({ type: 'bigint' }),
-    __metadata("design:type", Number)
-], FundingFee.prototype, "time", void 0);
+], FundingFeeReport.prototype, "income", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], FundingFee.prototype, "cny", void 0);
+], FundingFeeReport.prototype, "date", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], FundingFee.prototype, "user", void 0);
-FundingFee = __decorate([
+], FundingFeeReport.prototype, "cny", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], FundingFeeReport.prototype, "user", void 0);
+FundingFeeReport = __decorate([
     typeorm_1.Entity('funding_fee_report')
-], FundingFee);
-exports.FundingFee = FundingFee;
+], FundingFeeReport);
+exports.FundingFeeReport = FundingFeeReport;

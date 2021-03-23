@@ -14,9 +14,9 @@ const typeorm_1 = require("typeorm");
 let FundingFee = class FundingFee {
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
-    __metadata("design:type", Number)
-], FundingFee.prototype, "id", void 0);
+    typeorm_1.PrimaryColumn(),
+    __metadata("design:type", String)
+], FundingFee.prototype, "tranId", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
@@ -33,6 +33,10 @@ __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
 ], FundingFee.prototype, "cny", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], FundingFee.prototype, "price", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)

@@ -78,22 +78,25 @@ class WorkBot {
                     return (bf &&
                         bf.getFundingFeeFirst(tag, lastItem ? Number(lastItem.time) + 1 : 1600000000000));
                 }));
-                const r = yield Promise.all(promises);
-                r.forEach((items) => __awaiter(this, void 0, void 0, function* () {
-                    const fees = items === null || items === void 0 ? void 0 : items.map((orginFee) => {
-                        let fee = new FundingFee_1.FundingFee();
-                        fee.user = key;
-                        fee.income = orginFee && orginFee.income;
-                        fee.symbol = orginFee && orginFee.symbol;
-                        fee.tranId = String(orginFee.tranId);
-                        fee.time = orginFee && orginFee.time;
-                        fee.price = orginFee && orginFee.price;
-                        fee.cny = String(CNY_RATE * Number(orginFee.price) * Number(orginFee.income));
-                        return fee;
+                yield Promise.all(promises).then((r) => {
+                    console.log('r', r);
+                    r.forEach((items) => {
+                        const fees = items === null || items === void 0 ? void 0 : items.map((orginFee) => {
+                            let fee = new FundingFee_1.FundingFee();
+                            fee.user = key;
+                            fee.income = orginFee && orginFee.income;
+                            fee.symbol = orginFee && orginFee.symbol;
+                            fee.tranId = String(orginFee.tranId);
+                            fee.time = orginFee && orginFee.time;
+                            fee.price = orginFee && orginFee.price;
+                            fee.cny = String(CNY_RATE * Number(orginFee.price) * Number(orginFee.income));
+                            return fee;
+                        });
+                        typeorm_1.getManager()
+                            .save(fees)
+                            .then((r) => console.log('save success'));
                     });
-                    let saveResult = yield typeorm_1.getManager().save(fees);
-                    console.log('save success');
-                }));
+                });
             }
         });
     }
@@ -138,9 +141,7 @@ class WorkBot {
                 time: new Date(new Date().setHours(0, 0, 0, 0)).getTime(),
             })
                 .getMany();
-            const sum = fees.length > 0
-                ? fees.map((f) => Number(f.cny)).reduce((p, c) => p + c)
-                : 0;
+            const sum = fees.map((f) => Number(f.cny)).reduce((p, c) => p + c);
             return sum;
         });
     }

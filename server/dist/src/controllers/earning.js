@@ -27,11 +27,13 @@ const createEarning = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.createEarning = createEarning;
 const queryEarning = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const fundingFeeRepo = typeorm_1.getManager().getRepository(FundingFee_1.FundingFee);
-    const user = yield fundingFeeRepo
+    const fees = yield fundingFeeRepo
         .createQueryBuilder('fee')
-        .where('fee.id = :id', { id: 1 })
-        .getOne();
-    const result = yield typeorm_1.getManager().query(`SELECT FROM_UNIXTIME(time,'%Y-%m-%d')AS DATE,COUNT(*) FROM funding_fee WHERE user='pengtao' GROUP BY FROM_UNIXTIME(time,'%Y-%m-%d');`);
-    res.json(JSON.stringify(result));
+        .orderBy('time')
+        .getMany();
+    const results = fees.map((item) => {
+        return Object.assign(Object.assign({}, item), { income: Number(item.income) });
+    });
+    res.json(results);
 });
 exports.queryEarning = queryEarning;

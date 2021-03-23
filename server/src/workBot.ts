@@ -86,9 +86,9 @@ export default class WorkBot {
           )
         );
       });
-      await Promise.all(promises).then((r) => {
-        console.log('r', r);
-        r.forEach((items) => {
+      const r = await Promise.all(promises);
+      const reulst = wait Promise.all(
+        r.map(async (items) => {
           const fees = items?.map((orginFee) => {
             let fee = new FundingFee();
             fee.user = key;
@@ -102,11 +102,9 @@ export default class WorkBot {
             );
             return fee;
           });
-          getManager()
-            .save(fees)
-            .then((r) => console.log('save success'));
-        });
-      });
+          return getManager().save(fees);
+        })
+      );
     }
   }
 
@@ -152,7 +150,10 @@ export default class WorkBot {
         time: new Date(new Date().setHours(0, 0, 0, 0)).getTime(),
       })
       .getMany();
-    const sum = fees.map((f) => Number(f.cny)).reduce((p, c) => p + c);
+    const sum =
+      fees.length > 0
+        ? fees.map((f) => Number(f.cny)).reduce((p, c) => p + c)
+        : 0;
     return sum;
   }
 

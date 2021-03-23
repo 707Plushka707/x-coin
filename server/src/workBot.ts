@@ -52,15 +52,20 @@ export default class WorkBot {
       const bf = new BFunding(element.apiKey, element.apiSecret);
       element.bf = bf;
     });
-    // this.startTimerTask();
-    this.queryFundingFeeResult();
+    this.startTimerTask();
   }
-  startTimerTask() {
-    this.queryFundingFee();
-    const job = schedule.scheduleJob('0 1 0,8,16 * * ?', async () => {});
+
+  async startTimerTask() {
+    await this.queryFundingFee();
+    await this.queryFundingFeeResult();
+    const job = schedule.scheduleJob('0 1 0,8,16 * * ?', async () => {
+      await this.queryFundingFee();
+      await this.queryFundingFeeResult();
+    });
   }
 
   async queryFundingFee() {
+    console.log('start->queryFundingFee');
     for (const key in this.sources) {
       const element = this.sources[key];
       const bf = element.bf;
@@ -81,7 +86,7 @@ export default class WorkBot {
           )
         );
       });
-      Promise.all(promises).then((r) => {
+      await Promise.all(promises).then((r) => {
         console.log('r', r);
         r.forEach((items) => {
           const fees = items?.map((orginFee) => {
@@ -106,6 +111,7 @@ export default class WorkBot {
   }
 
   async queryFundingFeeResult() {
+    console.log('start->queryFundingFeeResult');
     for (const key in this.sources) {
       const element = this.sources[key];
       const bf = element.bf;
@@ -120,25 +126,9 @@ export default class WorkBot {
         return lastItem;
       });
 
-      const todayPromise = element.symbols.map((tag) => {
-        console.log(
-          'new Date(new Date().setHours(0, 0, 0, 0)).getTime()',
-          new Date(new Date().setHours(0, 0, 0, 0)).getTime()
-        );
-        return getManager()
-          .getRepository(FundingFee)
-          .createQueryBuilder('fee')
-          .where('fee.user = :user', { user: key })
-          .andWhere('fee.symbol = :symbol', { symbol: tag })
-          .andWhere('fee.time >= :time', {
-            time: new Date(new Date().setHours(0, 0, 0, 0)).getTime(),
-          })
-          .getMany();
-      });
-
       const toadySum = await this.queryToadySum(key);
 
-      Promise.all(promises).then(async (res) => {
+      await Promise.all(promises).then(async (res) => {
         const result = res.filter((item): item is FundingFee => {
           return new Date().getTime() - Number(item?.time) < 28700000; //间隔时间小于八小时
         });
@@ -149,11 +139,6 @@ export default class WorkBot {
           ` +
           `\n今日总收入：${toadySum.toFixed(2)}`;
         sendText('利息到账', desc, [key]);
-        // console.log(desc);
-      });
-
-      Promise.all(todayPromise).then((res) => {
-        // console.log('--', res);
       });
     }
   }

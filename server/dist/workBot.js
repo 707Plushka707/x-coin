@@ -48,15 +48,18 @@ class WorkBot {
             const bf = new binance_1.default(element.apiKey, element.apiSecret);
             element.bf = bf;
         });
-        // this.startTimerTask();
-        this.queryFundingFeeResult();
+        this.startTimerTask();
     }
     startTimerTask() {
-        this.queryFundingFee();
-        const job = node_schedule_1.default.scheduleJob('0 1 0,8,16 * * ?', () => __awaiter(this, void 0, void 0, function* () { }));
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.queryFundingFee();
+            yield this.queryFundingFeeResult();
+            const job = node_schedule_1.default.scheduleJob('0 1 0,8,16 * * ?', () => __awaiter(this, void 0, void 0, function* () { }));
+        });
     }
     queryFundingFee() {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log('start->queryFundingFee');
             for (const key in this.sources) {
                 const element = this.sources[key];
                 const bf = element.bf;
@@ -72,7 +75,7 @@ class WorkBot {
                     return (bf &&
                         bf.getFundingFeeFirst(tag, lastItem ? Number(lastItem.time) + 1 : 1600000000000));
                 }));
-                Promise.all(promises).then((r) => {
+                yield Promise.all(promises).then((r) => {
                     console.log('r', r);
                     r.forEach((items) => {
                         const fees = items === null || items === void 0 ? void 0 : items.map((orginFee) => {
@@ -96,6 +99,7 @@ class WorkBot {
     }
     queryFundingFeeResult() {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log('start->queryFundingFeeResult');
             for (const key in this.sources) {
                 const element = this.sources[key];
                 const bf = element.bf;
@@ -109,20 +113,8 @@ class WorkBot {
                         .getOne();
                     return lastItem;
                 }));
-                const todayPromise = element.symbols.map((tag) => {
-                    console.log('new Date(new Date().setHours(0, 0, 0, 0)).getTime()', new Date(new Date().setHours(0, 0, 0, 0)).getTime());
-                    return typeorm_1.getManager()
-                        .getRepository(FundingFee_1.FundingFee)
-                        .createQueryBuilder('fee')
-                        .where('fee.user = :user', { user: key })
-                        .andWhere('fee.symbol = :symbol', { symbol: tag })
-                        .andWhere('fee.time >= :time', {
-                        time: new Date(new Date().setHours(0, 0, 0, 0)).getTime(),
-                    })
-                        .getMany();
-                });
                 const toadySum = yield this.queryToadySum(key);
-                Promise.all(promises).then((res) => __awaiter(this, void 0, void 0, function* () {
+                yield Promise.all(promises).then((res) => __awaiter(this, void 0, void 0, function* () {
                     const result = res.filter((item) => {
                         return new Date().getTime() - Number(item === null || item === void 0 ? void 0 : item.time) < 28700000; //间隔时间小于八小时
                     });
@@ -134,9 +126,6 @@ class WorkBot {
                     pushBear_1.sendText('利息到账', desc, [key]);
                     // console.log(desc);
                 }));
-                Promise.all(todayPromise).then((res) => {
-                    // console.log('--', res);
-                });
             }
         });
     }

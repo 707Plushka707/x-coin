@@ -34,7 +34,7 @@ function sendTextToWechatWork(
       if (err) {
         return console.log(err);
       }
-      console.log(res);
+      console.log(body);
     }
   );
 }
@@ -53,7 +53,7 @@ function sendTextToWechatBot(content: string) {
       if (err) {
         return console.log(err);
       }
-      console.log(res);
+      console.log(body);
     }
   );
 }

@@ -26,7 +26,7 @@ function sendTextToWechatWork(title, desc, atList) {
         if (err) {
             return console.log(err);
         }
-        console.log(res);
+        console.log(body);
     });
 }
 function sendTextToWechatBot(content) {
@@ -40,6 +40,6 @@ function sendTextToWechatBot(content) {
         if (err) {
             return console.log(err);
         }
-        console.log(res);
+        console.log(body);
     });
 }

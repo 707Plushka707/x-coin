@@ -1,7 +1,7 @@
 import request from 'request';
 
 const WECHATWORK_URL =
-  'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=9f918c9f-4326-4eda-8b8c-f5065e393256';
+  'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=7ce160c4-acc5-4295-b43a-dca233ad0b7e';
 const WECHATBOT_URL =
   '118.25.84.114:18881/api/v1/chat/sendText?token=99d44e39c3cd49d08188dcc795d06969';
 

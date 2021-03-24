@@ -87,7 +87,7 @@ export default class WorkBot {
         );
       });
       const r = await Promise.all(promises);
-      const reulst = wait Promise.all(
+      const result = await Promise.all(
         r.map(async (items) => {
           const fees = items?.map((orginFee) => {
             let fee = new FundingFee();

@@ -5,7 +5,9 @@
   "scripts": {
     "build-ts": "tsc",
     "serve": "cross-env NODE_ENV=test node dist/server.js",
-    "start": " tsc && npm run serve"
+    "serve:production": "cross-env NODE_ENV=production node dist/server.js",
+    "start": " tsc && npm run serve",
+    "start:production": " tsc && npm run serve:production"
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",

@@ -1,1 +1,1 @@
-declare module "node-binance-api" 
+declare module 'node-binance-api'

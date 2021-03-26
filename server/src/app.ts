@@ -1,6 +1,5 @@
 import * as EarningController from './controllers/earning';
 import express from 'express';
-import * as bodyParser from 'body-parser';
 import cors from 'cors';
 
 const app = express();
@@ -8,8 +7,8 @@ const app = express();
 var router = express.Router();
 
 app.use(cors());
-app.use(bodyParser.urlencoded());
-app.use(bodyParser.json());
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
 app.set('port', 3100);
 
 app.use('/api', router);

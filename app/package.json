@@ -18,15 +18,16 @@
   },
   "scripts": {
     "start-all": "concurrently \"yarn start\" \"cd server && yarn start\"",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "craco start",
+    "build": "craco build",
+    "deploy": "yarn build && pm2 serve build 23000 --spa",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "alloy",
+      "alloy/react"
     ]
   },
   "browserslist": {
@@ -42,6 +43,12 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "^6.1.1",
+    "babel-eslint": "^10.1.0",
+    "craco-less": "^1.17.1",
+    "eslint": "^7.21.0",
+    "eslint-config-alloy": "^3.10.0",
+    "eslint-plugin-react": "^7.22.0",
     "concurrently": "^6.0.0"
   }
 }

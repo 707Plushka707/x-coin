@@ -56,8 +56,8 @@ export default class WorkBot {
   }
 
   async startTimerTask() {
-    await this.queryFundingFee();
-    await this.queryFundingFeeResult();
+    // await this.queryFundingFee();
+    // await this.queryFundingFeeResult();
     const job = schedule.scheduleJob('0 1 0,8,16 * * ?', async () => {
       await this.queryFundingFee();
       await this.queryFundingFeeResult();

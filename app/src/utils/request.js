@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as utils from 'axios/lib/utils';
 
 const services = axios.create({
-  baseURL: 'http://localhost:3100',
+  baseURL: 'http://tpeng.ddns.net:23100',
 });
 
 const request = (options) => {
@@ -13,20 +13,17 @@ const request = (options) => {
   });
 };
 
-utils.forEach(
-  ['delete', 'get', 'head', 'options'],
-  function forEachMethodNoData(method) {
-    request[method] = function (url, data, config) {
-      return request(
-        utils.merge(config || {}, {
-          method,
-          url,
-          params: data,
-        })
-      );
-    };
-  }
-);
+utils.forEach(['delete', 'get', 'head', 'options'], function forEachMethodNoData(method) {
+  request[method] = function (url, data, config) {
+    return request(
+      utils.merge(config || {}, {
+        method,
+        url,
+        params: data,
+      }),
+    );
+  };
+});
 
 utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
   request[method] = function (url, data, config) {
@@ -35,7 +32,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
         method,
         url,
         data,
-      })
+      }),
     );
   };
 });

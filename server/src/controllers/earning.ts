@@ -34,3 +34,35 @@ export const queryEarning = async (req: Request, res: Response) => {
 
   res.json(results);
 };
+
+export const queryAllUser = async (req: Request, res: Response) => {
+  const fundingFeeRepo = getManager().getRepository(FundingFee);
+  const users = await fundingFeeRepo
+    .createQueryBuilder()
+    .distinct()
+    .select('DISTINCT user')
+    .getRawMany();
+
+  res.json(users);
+};
+
+export const querySum = async (req: Request, res: Response) => {
+  const user = req.params.user;
+  const fundingFeeRepo = getManager().getRepository(FundingFee);
+  const total: { total: number } = await fundingFeeRepo
+    .createQueryBuilder('fee')
+    .select('SUM(cny) total')
+    .where('user = :user', { user })
+    .getRawOne();
+
+  // SELECT * FROM funding_fee WHERE date_format(FROM_UNIXTIME(time/1000),'%Y-%m-%d') = date_format(now(),'%Y-%m-%d')
+  const today: { today: number } = await fundingFeeRepo
+    .createQueryBuilder('fee')
+    .select('SUM(cny) today')
+    .where('user = :user', { user })
+    .andWhere(
+      "date_format(FROM_UNIXTIME(time/1000),'%Y-%m-%d') = date_format(now(),'%Y-%m-%d')"
+    )
+    .getRawOne();
+  res.json({ total: total.total, today: today.today });
+};

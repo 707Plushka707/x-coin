@@ -1,3 +1,4 @@
+import { queryAllUser, querySum } from './controllers/earning';
 import { createConnection } from 'typeorm';
 import app from './app';
 
@@ -25,6 +26,8 @@ createConnection().then(async (connection) => {
     //   console.log(r);
     // });
 
+    // queryAllUser();
+    // querySum();
     const wb = new WorkBot();
     wb.start();
 

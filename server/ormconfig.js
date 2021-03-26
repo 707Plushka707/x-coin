@@ -16,7 +16,7 @@ const database = {
     database: 'xcoin_test',
   },
   production: {
-    host: 'localhost',
+    host: 'tpeng.ddns.net',
     port: 23306,
     username: 'root',
     password: 'UVXcoin6049',
@@ -34,6 +34,7 @@ module.exports = {
   entities: ['dist/entity/*.js'],
   subscribers: ['dist/subscriber/*.js'],
   migrations: ['dist/migration/*.js'],
+  logging: 'all',
   cli: {
     entitiesDir: 'dist/entity',
     migrationsDir: 'dist/migration',

@@ -29,7 +29,7 @@ let sources = {
     apiSecret:
       'ChAHHu8FZIEsxmNdORRU9I15f9PTbQhh8yp5WRC69eyeIoPkQZozW1gXJ4cya4au',
 
-    symbols: ['DOTUSD_PERP', 'BNBUSD_PERP'],
+    symbols: ['DOTUSD_PERP', 'BNBUSD_PERP', 'BTCUSD_PERP'],
   },
 };
 

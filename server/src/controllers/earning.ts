@@ -1,3 +1,4 @@
+import { sources } from './../workBot';
 import { FundingFee } from './../entity/FundingFee';
 import { Request, Response, NextFunction } from 'express';
 import { getManager } from 'typeorm';
@@ -47,13 +48,19 @@ export const queryAllUser = async (req: Request, res: Response) => {
 };
 
 export const querySum = async (req: Request, res: Response) => {
-  const user = req.params.user;
+  const user: string = req.params.user;
   const fundingFeeRepo = getManager().getRepository(FundingFee);
   const total: { total: number } = await fundingFeeRepo
     .createQueryBuilder('fee')
     .select('SUM(cny) total')
     .where('user = :user', { user })
     .getRawOne();
+
+  const dayCountResult = await fundingFeeRepo.query(
+    `select count(1) as dayNums from (SELECT FROM_UNIXTIME( time/1000, '%Y年%m月%d' ) as days from funding_fee  where user = '${user}' group by days) a`
+  );
+
+  const dayCount = dayCountResult[0].dayNums;
 
   // SELECT * FROM funding_fee WHERE date_format(FROM_UNIXTIME(time/1000),'%Y-%m-%d') = date_format(now(),'%Y-%m-%d')
   const today: { today: number } = await fundingFeeRepo
@@ -64,5 +71,30 @@ export const querySum = async (req: Request, res: Response) => {
       "date_format(FROM_UNIXTIME(time/1000),'%Y-%m-%d') = date_format(now(),'%Y-%m-%d')"
     )
     .getRawOne();
-  res.json({ total: total.total, today: today.today });
+
+  const dayAvg = total.total / dayCount;
+  const dayRate = dayAvg / sources[user].capital;
+  const yearRate = dayRate * 365;
+  res.json({
+    total: total.total,
+    today: today.today,
+    dayAvg,
+    dayRate,
+    yearRate,
+  });
+};
+
+export const querySumGroupDay = async (req: Request, res: Response) => {
+  const user = req.params.user;
+  const fundingFeeRepo = getManager().getRepository(FundingFee);
+  const groupDay = await fundingFeeRepo
+    .createQueryBuilder('fee')
+    .select(
+      "FROM_UNIXTIME( time/1000, '%Y年%m月%d日' ) as date, ROUND(sum(cny),2)  as value"
+    )
+    .where('user = :user', { user })
+    .groupBy('date')
+    .getRawMany();
+
+  res.json(groupDay);
 };

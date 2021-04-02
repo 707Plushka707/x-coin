@@ -5,12 +5,11 @@
   "scripts": {
     "build-ts": "tsc",
     "serve": "cross-env NODE_ENV=test node dist/server.js",
-    "serve:production": "cross-env NODE_ENV=production node dist/server.js",
+    "serve:prod": "cross-env NODE_ENV=production node dist/server.js",
     "start": " tsc && npm run serve",
-    "start:production": " tsc && npm run serve:production",
-    "deploy" : "tsc && pm2 start",
-    "deploy:prod" : "tsc && pm2 start --env production"
-
+    "start:prod": " tsc && npm run serve:prod",
+    "deploy": "tsc && pm2 start",
+    "deploy:prod": "tsc && pm2 start --env production"
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",

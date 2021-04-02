@@ -7,9 +7,19 @@ import { sendText } from './utils/pushBear';
 
 const CNY_RATE = 6.45;
 
-let sources = {
+interface SquareConfig {
+  user: string;
+  apiKey: string;
+  apiSecret: string;
+  symbols: Array<string>;
+  capital: number;
+  bf?: BFunding;
+}
+
+export const sources: { [propName: string]: SquareConfig } = {
   pengtao: {
     user: 'pengtao',
+    capital: 110000,
     apiKey: 'MeVpTwmK9Naqi0OGsJrVfpPpuyj9QQvW50WU0u1WKUtiIq1TemVIZVlEvaJf8rVM',
     apiSecret:
       'u0pKGDdKdcFEZWPztMD2wTe6oc3hHMBD9iwjNnTSl5djYLscxGIbdDy2EL7KSOUr',
@@ -17,6 +27,7 @@ let sources = {
   },
   yangcheng: {
     user: 'yangcheng',
+    capital: 600000,
     apiKey: 'u7jogSqzQeIFuJhtcv52LzybqTdOHtJBDpbdHW686Kpf2jk3iufxcSujlwsO9Hli',
     apiSecret:
       'g9TC0BbUIINg3DsevHz5C8tUcxRzd5Vv1ZVmBwdAlGDbFyLSlLZQhJM8UheHkW2Z',
@@ -25,6 +36,7 @@ let sources = {
   },
   baiwenping: {
     user: 'baiwenping',
+    capital: 20000,
     apiKey: 'a6X2YhbZxJ2Ty5nWkCdbIw9jWgM0u3Iky9PKxztE60c836vdc1iG0lknEBVtX1LY',
     apiSecret:
       'ChAHHu8FZIEsxmNdORRU9I15f9PTbQhh8yp5WRC69eyeIoPkQZozW1gXJ4cya4au',
@@ -33,16 +45,8 @@ let sources = {
   },
 };
 
-interface SquareConfig {
-  user: string;
-  apiKey: string;
-  apiSecret: string;
-  symbols: Array<string>;
-  bf?: BFunding;
-}
-
 export default class WorkBot {
-  sources: { [propName: string]: SquareConfig };
+  sources;
   constructor() {
     this.sources = sources;
   }
@@ -68,8 +72,10 @@ export default class WorkBot {
     console.log('start->queryFundingFee');
     for (const key in this.sources) {
       const element = this.sources[key];
+      console.log('element.symbols', element.symbols);
       const bf = element.bf;
       const promises = element.symbols.map(async (tag) => {
+        console.log('tag--', tag);
         const lastItem = await getManager()
           .getRepository(FundingFee)
           .createQueryBuilder('fee')
@@ -80,10 +86,7 @@ export default class WorkBot {
         console.log('------', key, tag, lastItem);
         return (
           bf &&
-          bf.getFundingFeeFirst(
-            tag,
-            lastItem ? Number(lastItem!.time) + 1 : 1600000000000
-          )
+          bf.getFundingFeeFirst(tag, lastItem ? Number(lastItem!.time) + 1 : 0)
         );
       });
       const r = await Promise.all(promises);

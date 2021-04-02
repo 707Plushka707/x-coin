@@ -17,5 +17,6 @@ router.use('/earning/create', EarningController.createEarning);
 router.use('/earning/query', EarningController.queryEarning);
 router.use('/earning/users', EarningController.queryAllUser);
 router.use('/earning/sum/:user', EarningController.querySum);
+router.use('/earning/daySum/:user', EarningController.querySumGroupDay);
 
 export default app;

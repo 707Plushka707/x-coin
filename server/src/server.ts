@@ -6,6 +6,7 @@ import { sendText } from './utils/wechatwork';
 import BFunding from './utils/binance';
 import { SSL_OP_TLS_ROLLBACK_BUG } from 'node:constants';
 import WorkBot from './workBot';
+import { start } from './test';
 
 createConnection().then(async (connection) => {
   const server = app.listen(app.get('port'), () => {
@@ -15,6 +16,7 @@ createConnection().then(async (connection) => {
       app.get('env')
     );
     console.log('  Press CTRL-C to stop\n');
+    // start();
     // getFundingFee();
     // sendText('我是一个测试的信息');
 

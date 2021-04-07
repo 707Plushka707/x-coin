@@ -43,6 +43,15 @@ export const sources: { [propName: string]: SquareConfig } = {
 
     symbols: ['DOTUSD_PERP', 'BNBUSD_PERP', 'BTCUSD_PERP'],
   },
+  xupeng: {
+    user: 'xupeng',
+    capital: 1076176,
+    apiKey: 'uFOKNzQq2hXvJzsczJ6sCArtCMvdURcpvTVh5oFQYCqUp4o5hJxD8eFuloPW9vtV',
+    apiSecret:
+      'QqLbHGeJMezxeAypFDzmr7BQsWgcVMhBuI7LxyXnF4ExQYQAGK4MOWJfI6Hd0Xl4',
+
+    symbols: ['BNBUSD_PERP'],
+  },
 };
 
 export default class WorkBot {

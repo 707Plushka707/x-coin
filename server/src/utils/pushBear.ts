@@ -1,9 +1,9 @@
 import request from 'request';
 
-// const WECHATWORK_URL_TEST =
-// 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=7ce160c4-acc5-4295-b43a-dca233ad0b7e';
 const WECHATWORK_URL =
-  'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=ab52ac95-f265-4860-9f72-74749cafbf3d';
+  'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=7ce160c4-acc5-4295-b43a-dca233ad0b7e';
+// const WECHATWORK_URL_TEST =
+//   'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=ab52ac95-f265-4860-9f72-74749cafbf3d';
 
 const WECHATBOT_URL =
   '118.25.84.114:18881/api/v1/chat/sendText?token=99d44e39c3cd49d08188dcc795d06969';
